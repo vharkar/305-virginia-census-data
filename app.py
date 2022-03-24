@@ -41,24 +41,23 @@ app.title=tabtitle
 
 app.layout = html.Div(children=[
     
-    html.H2('Countywise display of US Census Data for 2017'),
+    html.H2('2017 US Census Data - by State'),
     
-    html.Div([
-        # Dropdown for state
-        html.H6('Select State:'),
-        dcc.Dropdown(
-            id='state-drop',
-            options=[{'label': i, 'value': i} for i in statesList],
-            value='Virginia'
-        ),
-        # Dropdown for attribute
-        html.H6('Select census variable:'),
-        dcc.Dropdown(
-            id='attr-drop',
-            options=[{'label': i, 'value': i} for i in varlist],
-            value='MeanCommute'
-        ),
-    ], className='five columns'),
+    # Dropdown for state
+    html.H6('Select State:'),
+    dcc.Dropdown(
+        id='state-drop',
+        options=[{'label': i, 'value': i} for i in statesList],
+         value='Virginia'
+    ),
+    
+    # Dropdown for attribute
+    html.H6('Select census variable:'),
+    dcc.Dropdown(
+        id='attr-drop',
+        options=[{'label': i, 'value': i} for i in varlist],
+        value='MeanCommute'
+    ),
     
     # US MAP
     html.Div([

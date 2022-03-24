@@ -12,7 +12,7 @@ with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-c
 
 ########### Define a few variables ######
 
-tabtitle = 'Virginia Counties'
+tabtitle = 'Virginia Vs US Counties'
 sourceurl = 'https://www.kaggle.com/muonneutrino/us-census-demographic-data'
 githublink = 'https://github.com/vharkar/305-virginia-census-data'
 varlist=['TotalPop', 'Men', 'Women', 'Hispanic',
@@ -27,7 +27,7 @@ census=pd.read_csv('resources/acs2017_county_data.csv')
 fips=pd.read_excel('resources/ruralurbancodes2013.xls')
 fips.groupby('RUCC_2013')[['RUCC_2013','Description']].max()
 us=pd.merge(census, fips, left_on='CountyId', right_on='FIPS', how='left')
-va=us.loc[us['State_y']=='VA']
+va=us.loc[us['State_y']=='CA']
 us=us.dropna()
 
 ########### Initiate the app

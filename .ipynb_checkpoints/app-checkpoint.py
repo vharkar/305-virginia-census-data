@@ -36,7 +36,8 @@ app.title=tabtitle
 app.layout = html.Div(children=[
     html.H2('Virginia and US Census Data Comparision for 2017'),
     
-    # Dropdown
+    # Dropdown 
+    # VA MAP
     html.Div([
            html.H6('Select census variable:'),
            dcc.Dropdown(
@@ -44,28 +45,24 @@ app.layout = html.Div(children=[
                options=[{'label': i, 'value': i} for i in varlist],
                value='MeanCommute'
            ),
-    ], className='three columns'),
-    
-    html.Br(),
-    
-    # VA MAP
-    html.Div([
-            dcc.Graph(id='va-map1')
-        ], className='six columns'),
-    
-    html.Br(),
+           dcc.Graph(id='va-map1'),
+           html.Br()
+    ], className='six columns'),
     
     # US MAP
     html.Div([
-            dcc.Graph(id='va-map2')
-        ], className='ten columns'),
+            dcc.Graph(id='va-map2'),
+            html.Br()
+    ], className='ten columns'),
     
     # Footer
-    html.Br(),
-    html.A('Code on Github', href=githublink),
-    html.Br(),
-    html.A("Data Source", href=sourceurl),
-    ]
+    html.Div([
+       html.Br(),
+       html.A('Code on Github', href=githublink),
+       html.Br(),
+       html.A("Data Source", href=sourceurl)
+    ], className='three columns'),
+  ]
 )
 
 ############ Callbacks

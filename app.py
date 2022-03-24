@@ -34,6 +34,7 @@ census['FIPSSTR'] = census['CountyId'].apply(fipsStr)
 
 fips=pd.read_excel('resources/ruralurbancodes2013.xls')
 fips.groupby('RUCC_2013')[['RUCC_2013','Description','County_Name','Population_2010','State']].max()
+fips['FIPSSTR'] = fips['FIPS'].apply(fipsStr)
 
 statesList = []
 for i in census['State'].unique():
@@ -95,8 +96,6 @@ app.layout = html.Div(children=[
 def display_results1(state, attribute):
     
     statedf=census.loc[census['State']==state]
-    statedf['FIPSSTR'] = statedf['FIPS'].apply(fipsStr)
-    
     county=pd.merge(statedf, fips, left_on='FIPSSTR', right_on='FIPSSTR', how='left')
 
     valmin=county[attribute].min()

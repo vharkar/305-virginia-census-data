@@ -7,8 +7,7 @@ import pandas as pd
 # Read in the USA counties shape files
 from urllib.request import urlopen
 import json
-#with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
-with open('resources/geojson-counties-fips.json') as response:    
+with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
     counties = json.load(response)
 
 ########### Define a few variables ######
@@ -63,7 +62,7 @@ app.layout = html.Div(children=[
            options=[{'label': i, 'value': i} for i in varlist],
            value='MeanCommute'
        ),
-       html.Br(),
+       html.Br()
     ], className='three columns'),
     
     # US MAP

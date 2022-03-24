@@ -10,6 +10,12 @@ import json
 with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
     counties = json.load(response)
 
+def fipsStr(fips):
+    if fips < 10000:
+        return "0" + str(fips)
+    else:
+        return str(fips)
+    
 ########### Define a few variables ######
 
 tabtitle = 'US Counties Census Info'
@@ -81,12 +87,6 @@ app.layout = html.Div(children=[
     ], className='three columns')
   ]
 )
-
-def fipsStr(fips):
-    if fips < 10000:
-        return "0" + str(fips)
-    else:
-        return str(fips)
     
 ############ Callbacks
 @app.callback(Output('county-map', 'figure'),
@@ -118,7 +118,6 @@ def display_results1(state, attribute):
 
     return fig
     
-
 # https://community.plot.ly/t/what-colorscales-are-available-in-plotly-and-which-are-the-default/2079
 ############ Deploy
 if __name__ == '__main__':

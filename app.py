@@ -41,7 +41,10 @@ app.title=tabtitle
 
 app.layout = html.Div(children=[
     
-    html.H2('2017 US Census Data - by State'),
+    html.Div([
+        
+      html.H2('2017 US Census Data - by State')
+    ], className='two columns'),
     
     # Dropdown for state
     html.Div([
@@ -50,10 +53,9 @@ app.layout = html.Div(children=[
            id='state-drop',
            options=[{'label': i, 'value': i} for i in statesList],
             value='Virginia'
-       )
+       ),
+       html.Br()
     ], className='four columns'),
-    
-    html.Br(),
     
     # Dropdown for attribute
     html.Div([
@@ -62,10 +64,9 @@ app.layout = html.Div(children=[
            id='attr-drop',
            options=[{'label': i, 'value': i} for i in varlist],
            value='MeanCommute'
-       )
+       ),
+       html.Br(),
     ], className='four columns'),
-    
-    html.Br(),
     
     # US MAP
     html.Div([

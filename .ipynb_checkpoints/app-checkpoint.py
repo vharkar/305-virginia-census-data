@@ -52,6 +52,10 @@ app.layout = html.Div(children=[
         ], className='nine columns'),
     ], className='twelve columns'),
     
+    html.Div([
+            dcc.Graph(id='va-map2')
+        ], className='nine columns'),
+    
     # Footer
     html.Br(),
     html.A('Code on Github', href=githublink),

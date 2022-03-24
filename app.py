@@ -80,7 +80,7 @@ def display_results1(selected_value):
     valmax1=va[selected_value].max()
     fig1 = go.Figure(go.Choroplethmapbox(geojson=counties,
                                     locations=va['FIPS'],
-                                    z=df[selected_value],
+                                    z=va[selected_value],
                                     colorscale='Magma',
                                     text=va['County'],
                                     zmin=valmin1,

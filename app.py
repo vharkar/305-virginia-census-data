@@ -44,7 +44,7 @@ app.layout = html.Div(children=[
                options=[{'label': i, 'value': i} for i in varlist],
                value='MeanCommute'
            ),
-    ], className='three columns')
+    ], className='three columns'),
     
     html.Br(),
     

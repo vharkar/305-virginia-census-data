@@ -27,6 +27,7 @@ census=pd.read_csv('resources/acs2017_county_data.csv')
 fips=pd.read_excel('resources/ruralurbancodes2013.xls')
 fips.groupby('RUCC_2013')[['RUCC_2013','Description']].max()
 df=pd.merge(census, fips, left_on='CountyId', right_on='FIPS', how='left')
+va=df.loc[df['State_y']=='VA']
 
 
 ########### Initiate the app
@@ -50,13 +51,13 @@ app.layout = html.Div(children=[
                value='MeanCommute'
            ),
            html.Br(),
-           dcc.Graph(id='va-map1'),
+           dcc.Graph(id='va-map'),
            html.Br()
     ], className='six columns'),
     
     # US MAP
     html.Div([
-            dcc.Graph(id='va-map2'),
+            dcc.Graph(id='us-map'),
             html.Br()
     ], className='ten columns'),
     
@@ -71,12 +72,12 @@ app.layout = html.Div(children=[
 )
 
 ############ Callbacks
-@app.callback(Output('va-map1', 'figure'),
-              Output('va-map2', 'figure'),
+@app.callback(Output('va-map', 'figure'),
+              Output('us-map', 'figure'),
               [Input('stats-drop1', 'value')])
 def display_results1(selected_value):
-    valmin1=df[selected_value].min()
-    valmax1=df[selected_value].max()
+    valmin1=va[selected_value].min()
+    valmax1=va[selected_value].max()
     fig1 = go.Figure(go.Choroplethmapbox(geojson=counties,
                                     locations=df['FIPS'],
                                     z=df[selected_value],

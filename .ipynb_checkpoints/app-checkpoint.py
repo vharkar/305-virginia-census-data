@@ -52,23 +52,6 @@ app.layout = html.Div(children=[
         ], className='nine columns'),
     ], className='twelve columns'),
     
-    html.Br(),
-    html.Div(children=[
-        # left side
-        html.Div([
-                html.H6('Select census variable:'),
-                dcc.Dropdown(
-                    id='stats-drop2',
-                    options=[{'label': i, 'value': i} for i in varlist],
-                    value='MeanCommute'
-                ),
-        ], className='three columns'),
-        # right side
-        html.Div([
-            dcc.Graph(id='va-map2')
-        ], className='nine columns'),
-    ], className='twelve columns'),
-    
     # Footer
     html.Br(),
     html.A('Code on Github', href=githublink),
@@ -79,42 +62,41 @@ app.layout = html.Div(children=[
 
 ############ Callbacks
 @app.callback(Output('va-map1', 'figure'),
+              Output('va-map2', 'figure'),
               [Input('stats-drop1', 'value')])
 def display_results1(selected_value):
-    valmin=df[selected_value].min()
-    valmax=df[selected_value].max()
-    fig = go.Figure(go.Choroplethmapbox(geojson=counties,
+    valmin1=df[selected_value].min()
+    valmax1=df[selected_value].max()
+    fig1 = go.Figure(go.Choroplethmapbox(geojson=counties,
                                     locations=df['FIPS'],
                                     z=df[selected_value],
                                     colorscale='Blues',
                                     text=df['County'],
-                                    zmin=valmin,
-                                    zmax=valmax,
+                                    zmin=valmin1,
+                                    zmax=valmax1,
                                     marker_line_width=0))
-    fig.update_layout(mapbox_style="carto-positron",
+    fig1.update_layout(mapbox_style="carto-positron",
                       mapbox_zoom=5.8,
                       mapbox_center = {"lat": 38.0293, "lon": -79.4428})
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-    return fig
+    fig1.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     
-@app.callback(Output('va-map2', 'figure'),
-              [Input('stats-drop2', 'value')])
-def display_results2(selected_value):
-    valmin=df[selected_value].min()
-    valmax=df[selected_value].max()
-    fig = go.Figure(go.Choroplethmapbox(geojson=counties,
+    valmin2=df[selected_value].min()
+    valmax2=df[selected_value].max()
+    fig2 = go.Figure(go.Choroplethmapbox(geojson=counties,
                                     locations=df['FIPS'],
                                     z=df[selected_value],
                                     colorscale='Blues',
                                     text=df['County'],
-                                    zmin=valmin,
-                                    zmax=valmax,
+                                    zmin=valmin2,
+                                    zmax=valmax2,
                                     marker_line_width=0))
-    fig.update_layout(mapbox_style="carto-positron",
-                      mapbox_zoom=5.8,
-                      mapbox_center = {"lat": 38.0293, "lon": -79.4428})
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-    return fig
+    fig2.update_layout(mapbox_style="carto-positron",
+                      mapbox_zoom=3,
+                      mapbox_center = {"lat": 37.0902, "lon": -95.7129})
+    fig2.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+
+    return fig1, fig2
+    
 
 # https://community.plot.ly/t/what-colorscales-are-available-in-plotly-and-which-are-the-default/2079
 ############ Deploy

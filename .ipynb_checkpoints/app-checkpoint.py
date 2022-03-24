@@ -41,17 +41,34 @@ app.layout = html.Div(children=[
         html.Div([
                 html.H6('Select census variable:'),
                 dcc.Dropdown(
-                    id='stats-drop',
+                    id='stats-drop1',
                     options=[{'label': i, 'value': i} for i in varlist],
                     value='MeanCommute'
                 ),
         ], className='three columns'),
         # right side
         html.Div([
-            dcc.Graph(id='va-map')
+            dcc.Graph(id='va-map1')
         ], className='nine columns'),
     ], className='twelve columns'),
-
+    
+    html.Br(),
+    html.Div(children=[
+        # left side
+        html.Div([
+                html.H6('Select census variable:'),
+                dcc.Dropdown(
+                    id='stats-drop2',
+                    options=[{'label': i, 'value': i} for i in varlist],
+                    value='MeanCommute'
+                ),
+        ], className='three columns'),
+        # right side
+        html.Div([
+            dcc.Graph(id='va-map2')
+        ], className='nine columns'),
+    ], className='twelve columns'),
+    
     # Footer
     html.Br(),
     html.A('Code on Github', href=githublink),
@@ -61,9 +78,27 @@ app.layout = html.Div(children=[
 )
 
 ############ Callbacks
-@app.callback(Output('va-map', 'figure'),
-              [Input('stats-drop', 'value')])
-def display_results(selected_value):
+@app.callback(Output('va-map1', 'figure'),
+              [Input('stats-drop1', 'value')])
+def display_results1(selected_value):
+    valmin=df[selected_value].min()
+    valmax=df[selected_value].max()
+    fig = go.Figure(go.Choroplethmapbox(geojson=counties,
+                                    locations=df['FIPS'],
+                                    z=df[selected_value],
+                                    colorscale='Blues',
+                                    text=df['County'],
+                                    zmin=valmin,
+                                    zmax=valmax,
+                                    marker_line_width=0))
+    fig.update_layout(mapbox_style="carto-positron",
+                      mapbox_zoom=5.8,
+                      mapbox_center = {"lat": 38.0293, "lon": -79.4428})
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    
+@app.callback(Output('va-map2', 'figure'),
+              [Input('stats-drop2', 'value')])
+def display_results2(selected_value):
     valmin=df[selected_value].min()
     valmax=df[selected_value].max()
     fig = go.Figure(go.Choroplethmapbox(geojson=counties,

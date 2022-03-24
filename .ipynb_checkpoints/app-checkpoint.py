@@ -26,9 +26,9 @@ varlist=['TotalPop', 'Men', 'Women', 'Hispanic',
 census=pd.read_csv('resources/acs2017_county_data.csv')
 fips=pd.read_excel('resources/ruralurbancodes2013.xls')
 fips.groupby('RUCC_2013')[['RUCC_2013','Description']].max()
-df=pd.merge(census, fips, left_on='CountyId', right_on='FIPS', how='left')
-va=df.loc[df['State_y']=='VA']
-
+us=pd.merge(census, fips, left_on='CountyId', right_on='FIPS', how='left')
+va=us.loc[us['State_y']=='VA']
+us=us.dropna()
 
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -53,12 +53,11 @@ app.layout = html.Div(children=[
            html.Br(),
            dcc.Graph(id='va-map'),
            html.Br()
-    ], className='six columns'),
+    ], className='five columns'),
     
     # US MAP
     html.Div([
-            dcc.Graph(id='us-map'),
-            html.Br()
+            dcc.Graph(id='us-map')
     ], className='ten columns'),
     
     # Footer
@@ -92,13 +91,13 @@ def display_results1(selected_value):
                       mapbox_center = {"lat": 38.0293, "lon": -79.4428})
     fig1.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     
-    valmin2=df[selected_value].min()
-    valmax2=df[selected_value].max()
+    valmin2=us[selected_value].min()
+    valmax2=us[selected_value].max()
     fig2 = go.Figure(go.Choroplethmapbox(geojson=counties,
-                                    locations=df['FIPS'],
-                                    z=df[selected_value],
+                                    locations=us['FIPS'],
+                                    z=us[selected_value],
                                     colorscale='Magma',
-                                    text=df['County'],
+                                    text=us['County'],
                                     zmin=valmin2,
                                     zmax=valmax2,
                                     marker_opacity=0.5,

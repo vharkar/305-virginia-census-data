@@ -24,6 +24,8 @@ varlist=['TotalPop', 'Men', 'Women', 'Hispanic',
        'SelfEmployed', 'FamilyWork', 'Unemployment', 'RUCC_2013']
 
 census=pd.read_csv('resources/acs2017_county_data.csv')
+census['FIPSSTR'] = census['CountyId'].apply(fipsStr)
+
 fips=pd.read_excel('resources/ruralurbancodes2013.xls')
 fips.groupby('RUCC_2013')[['RUCC_2013','Description','County_Name','Population_2010','State']].max()
 
@@ -80,6 +82,12 @@ app.layout = html.Div(children=[
   ]
 )
 
+def fipsStr(fips):
+    if fips < 10000:
+        return "0" + str(fips)
+    else:
+        return str(fips)
+    
 ############ Callbacks
 @app.callback(Output('county-map', 'figure'),
               Input('state-drop', 'value'),
@@ -87,13 +95,15 @@ app.layout = html.Div(children=[
 def display_results1(state, attribute):
     
     statedf=census.loc[census['State']==state]
-    county=pd.merge(statedf, fips, left_on='CountyId', right_on='FIPS', how='left')
+    statedf['FIPSSTR'] = statedf['FIPS'].apply(fipsStr)
+    
+    county=pd.merge(statedf, fips, left_on='FIPSSTR', right_on='FIPSSTR', how='left')
 
     valmin=county[attribute].min()
     valmax=county[attribute].max()
     
     fig = go.Figure(go.Choroplethmapbox(geojson=counties,
-                                    locations=county['FIPS'],
+                                    locations=county['FIPSSTR'],
                                     z=county[attribute],
                                     colorscale='Magma',
                                     text=county['County'],

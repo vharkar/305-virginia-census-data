@@ -95,6 +95,7 @@ def display_results1(selected_value):
                       mapbox_zoom=5.8,
                       mapbox_center = {"lat": 38.0293, "lon": -79.4428})
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    return fig
     
 @app.callback(Output('va-map2', 'figure2'),
               [Input('stats-drop2', 'value')])
@@ -113,11 +114,9 @@ def display_results2(selected_value):
                       mapbox_zoom=5.8,
                       mapbox_center = {"lat": 38.0293, "lon": -79.4428})
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-
-# https://community.plot.ly/t/what-colorscales-are-available-in-plotly-and-which-are-the-default/2079
     return fig
 
-
+# https://community.plot.ly/t/what-colorscales-are-available-in-plotly-and-which-are-the-default/2079
 ############ Deploy
 if __name__ == '__main__':
     app.run_server(debug=True)

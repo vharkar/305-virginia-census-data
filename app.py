@@ -79,10 +79,10 @@ def display_results1(selected_value):
     valmin1=va[selected_value].min()
     valmax1=va[selected_value].max()
     fig1 = go.Figure(go.Choroplethmapbox(geojson=counties,
-                                    locations=df['FIPS'],
+                                    locations=va['FIPS'],
                                     z=df[selected_value],
                                     colorscale='Magma',
-                                    text=df['County'],
+                                    text=va['County'],
                                     zmin=valmin1,
                                     zmax=valmax1,
                                     marker_opacity=0.5,

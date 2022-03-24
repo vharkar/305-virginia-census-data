@@ -41,7 +41,7 @@ app.title=tabtitle
 
 app.layout = html.Div(children=[
     
-    html.H2('Countywise display of US Census Datafor 2017'),
+    html.H2('Countywise display of US Census Data for 2017'),
     
     html.Div([
         # Dropdown for state
@@ -87,7 +87,7 @@ def display_results1(state, attribute):
     valmin=county[attribute].min()
     valmax=county[attribute].max()
     
-    fig1 = go.Figure(go.Choroplethmapbox(geojson=counties,
+    fig = go.Figure(go.Choroplethmapbox(geojson=counties,
                                     locations=county['FIPS'],
                                     z=county[attribute],
                                     colorscale='Magma',
@@ -96,10 +96,10 @@ def display_results1(state, attribute):
                                     zmax=valmax,
                                     marker_opacity=0.5,
                                     marker_line_width=0))
-    fig1.update_layout(mapbox_style="carto-positron",
+    fig.update_layout(mapbox_style="carto-positron",
                       mapbox_zoom=5.8,
                       mapbox_center = {"lat": 37.0902, "lon": -95.7129})
-    fig1.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
 
     return fig
     

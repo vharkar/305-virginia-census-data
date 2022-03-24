@@ -78,7 +78,7 @@ app.layout = html.Div(children=[
 )
 
 ############ Callbacks
-@app.callback(Output('va-map1', 'figure'),
+@app.callback(Output('va-map1', 'figure1'),
               [Input('stats-drop1', 'value')])
 def display_results1(selected_value):
     valmin=df[selected_value].min()
@@ -96,7 +96,7 @@ def display_results1(selected_value):
                       mapbox_center = {"lat": 38.0293, "lon": -79.4428})
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     
-@app.callback(Output('va-map2', 'figure'),
+@app.callback(Output('va-map2', 'figure2'),
               [Input('stats-drop2', 'value')])
 def display_results2(selected_value):
     valmin=df[selected_value].min()

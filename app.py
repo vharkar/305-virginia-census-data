@@ -12,7 +12,7 @@ with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-c
 
 ########### Define a few variables ######
 
-tabtitle = 'Virginia Vs US Counties'
+tabtitle = 'US Counties Census Info'
 sourceurl = 'https://www.kaggle.com/muonneutrino/us-census-demographic-data'
 githublink = 'https://github.com/vharkar/305-virginia-census-data'
 varlist=['TotalPop', 'Men', 'Women', 'Hispanic',
@@ -25,10 +25,11 @@ varlist=['TotalPop', 'Men', 'Women', 'Hispanic',
 
 census=pd.read_csv('resources/acs2017_county_data.csv')
 fips=pd.read_excel('resources/ruralurbancodes2013.xls')
-fips.groupby('RUCC_2013')[['RUCC_2013','Description']].max()
-us=pd.merge(census, fips, left_on='CountyId', right_on='FIPS', how='left')
-va=us.loc[us['State_y']=='CA']
-us=us.dropna()
+fips.groupby('RUCC_2013')[['RUCC_2013','Description','County_Name','Population_2010','State']].max()
+
+statesList = []
+for i in census['State'].unique():
+    statesList.append(i)
 
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -39,25 +40,29 @@ app.title=tabtitle
 ########### Layout
 
 app.layout = html.Div(children=[
-    html.H2('Virginia and US Census Data Comparision for 2017'),
     
-    # Dropdown 
-    # VA MAP
+    html.H2('Countywise display of US Census Datafor 2017'),
+    
     html.Div([
-           html.H6('Select census variable:'),
-           dcc.Dropdown(
-               id='stats-drop1',
-               options=[{'label': i, 'value': i} for i in varlist],
-               value='MeanCommute'
-           ),
-           html.Br(),
-           dcc.Graph(id='va-map'),
-           html.Br()
+        # Dropdown for state
+        html.H6('Select State:'),
+        dcc.Dropdown(
+            id='state-drop',
+            options=[{'label': i, 'value': i} for i in statesList],
+            value='Virginia'
+        ),
+        # Dropdown for attribute
+        html.H6('Select census variable:'),
+        dcc.Dropdown(
+            id='attr-drop',
+            options=[{'label': i, 'value': i} for i in varlist],
+            value='MeanCommute'
+        ),
     ], className='five columns'),
     
     # US MAP
     html.Div([
-            dcc.Graph(id='us-map')
+        dcc.Graph(id='county-map')
     ], className='ten columns'),
     
     # Footer
@@ -71,43 +76,32 @@ app.layout = html.Div(children=[
 )
 
 ############ Callbacks
-@app.callback(Output('va-map', 'figure'),
-              Output('us-map', 'figure'),
-              [Input('stats-drop1', 'value')])
-def display_results1(selected_value):
-    valmin1=va[selected_value].min()
-    valmax1=va[selected_value].max()
+@app.callback(Output('county-map', 'figure'),
+              Input('state-drop', 'value'),
+              Input('attr-drop', 'value'))
+def display_results1(state, attribute):
+    
+    statedf=census.loc[census['State']==state]
+    county=pd.merge(statedf, fips, left_on='CountyId', right_on='FIPS', how='left')
+
+    valmin=county[attribute].min()
+    valmax=county[attribute].max()
+    
     fig1 = go.Figure(go.Choroplethmapbox(geojson=counties,
-                                    locations=va['FIPS'],
-                                    z=va[selected_value],
+                                    locations=county['FIPS'],
+                                    z=county[attribute],
                                     colorscale='Magma',
-                                    text=va['County'],
-                                    zmin=valmin1,
-                                    zmax=valmax1,
+                                    text=county['County'],
+                                    zmin=valmin,
+                                    zmax=valmax,
                                     marker_opacity=0.5,
                                     marker_line_width=0))
     fig1.update_layout(mapbox_style="carto-positron",
                       mapbox_zoom=5.8,
-                      mapbox_center = {"lat": 38.0293, "lon": -79.4428})
-    fig1.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-    
-    valmin2=us[selected_value].min()
-    valmax2=us[selected_value].max()
-    fig2 = go.Figure(go.Choroplethmapbox(geojson=counties,
-                                    locations=us['FIPS'],
-                                    z=us[selected_value],
-                                    colorscale='Magma',
-                                    text=us['County'],
-                                    zmin=valmin2,
-                                    zmax=valmax2,
-                                    marker_opacity=0.5,
-                                    marker_line_width=0))
-    fig2.update_layout(mapbox_style="carto-positron",
-                      mapbox_zoom=3,
                       mapbox_center = {"lat": 37.0902, "lon": -95.7129})
-    fig2.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    fig1.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
 
-    return fig1, fig2
+    return fig
     
 
 # https://community.plot.ly/t/what-colorscales-are-available-in-plotly-and-which-are-the-default/2079

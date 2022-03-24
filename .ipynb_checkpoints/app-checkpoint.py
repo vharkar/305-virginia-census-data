@@ -34,27 +34,31 @@ app.title=tabtitle
 ########### Layout
 
 app.layout = html.Div(children=[
-    html.H1('Virginia Census Data 2017'),
-    # Dropdowns
-    html.Div(children=[
-        # left side
-        html.Div([
-                html.H6('Select census variable:'),
-                dcc.Dropdown(
-                    id='stats-drop1',
-                    options=[{'label': i, 'value': i} for i in varlist],
-                    value='MeanCommute'
-                ),
-        ], className='three columns'),
-        # right side
-        html.Div([
-            dcc.Graph(id='va-map1')
-        ], className='nine columns'),
-    ], className='twelve columns'),
+    html.H2('Virginia and US Census Data Comparision for 2017'),
     
+    # Dropdown
+    html.Div([
+           html.H6('Select census variable:'),
+           dcc.Dropdown(
+               id='stats-drop1',
+               options=[{'label': i, 'value': i} for i in varlist],
+               value='MeanCommute'
+           ),
+    ], className='three columns')
+    
+    html.Br(),
+    
+    # VA MAP
+    html.Div([
+            dcc.Graph(id='va-map1')
+        ], className='six columns'),
+    
+    html.Br(),
+    
+    # US MAP
     html.Div([
             dcc.Graph(id='va-map2')
-        ], className='nine columns'),
+        ], className='ten columns'),
     
     # Footer
     html.Br(),

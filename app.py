@@ -44,20 +44,28 @@ app.layout = html.Div(children=[
     html.H2('2017 US Census Data - by State'),
     
     # Dropdown for state
-    html.H6('Select State:'),
-    dcc.Dropdown(
-        id='state-drop',
-        options=[{'label': i, 'value': i} for i in statesList],
-         value='Virginia'
-    ),
+    html.Div([
+       html.H6('Select State:'),
+       dcc.Dropdown(
+           id='state-drop',
+           options=[{'label': i, 'value': i} for i in statesList],
+            value='Virginia'
+       )
+    ], className='four columns'),
+    
+    html.Br(),
     
     # Dropdown for attribute
-    html.H6('Select census variable:'),
-    dcc.Dropdown(
-        id='attr-drop',
-        options=[{'label': i, 'value': i} for i in varlist],
-        value='MeanCommute'
-    ),
+    html.Div([
+       html.H6('Select census variable:'),
+       dcc.Dropdown(
+           id='attr-drop',
+           options=[{'label': i, 'value': i} for i in varlist],
+           value='MeanCommute'
+       )
+    ], className='four columns'),
+    
+    html.Br(),
     
     # US MAP
     html.Div([

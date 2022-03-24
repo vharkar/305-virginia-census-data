@@ -23,7 +23,11 @@ varlist=['TotalPop', 'Men', 'Women', 'Hispanic',
        'WorkAtHome', 'MeanCommute', 'Employed', 'PrivateWork', 'PublicWork',
        'SelfEmployed', 'FamilyWork', 'Unemployment', 'RUCC_2013']
 
-df=pd.read_pickle('resources/va-stats.pkl')
+census=pd.read_csv('resources/acs2017_county_data.csv')
+fips=pd.read_excel('resources/ruralurbancodes2013.xls')
+fips.groupby('RUCC_2013')[['RUCC_2013','Description']].max()
+df=pd.merge(census, fips, left_on='CountyId', right_on='FIPS', how='left')
+
 
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -45,6 +49,7 @@ app.layout = html.Div(children=[
                options=[{'label': i, 'value': i} for i in varlist],
                value='MeanCommute'
            ),
+           html.Br(),
            dcc.Graph(id='va-map1'),
            html.Br()
     ], className='six columns'),
@@ -75,10 +80,11 @@ def display_results1(selected_value):
     fig1 = go.Figure(go.Choroplethmapbox(geojson=counties,
                                     locations=df['FIPS'],
                                     z=df[selected_value],
-                                    colorscale='Blues',
+                                    colorscale='Magma',
                                     text=df['County'],
                                     zmin=valmin1,
                                     zmax=valmax1,
+                                    marker_opacity=0.5,
                                     marker_line_width=0))
     fig1.update_layout(mapbox_style="carto-positron",
                       mapbox_zoom=5.8,
@@ -90,10 +96,11 @@ def display_results1(selected_value):
     fig2 = go.Figure(go.Choroplethmapbox(geojson=counties,
                                     locations=df['FIPS'],
                                     z=df[selected_value],
-                                    colorscale='Blues',
+                                    colorscale='Magma',
                                     text=df['County'],
                                     zmin=valmin2,
                                     zmax=valmax2,
+                                    marker_opacity=0.5,
                                     marker_line_width=0))
     fig2.update_layout(mapbox_style="carto-positron",
                       mapbox_zoom=3,

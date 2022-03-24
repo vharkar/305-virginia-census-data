@@ -40,12 +40,9 @@ app.title=tabtitle
 ########### Layout
 
 app.layout = html.Div(children=[
-    
-    html.Div([
         
-      html.H2('2017 US Census Data - by State')
-    ], className='two columns'),
-    
+    html.H2('2017 US Census Data - by State', style = {'text-align':'center'}),
+      
     # Dropdown for state
     html.Div([
        html.H6('Select State:'),
@@ -55,7 +52,7 @@ app.layout = html.Div(children=[
             value='Virginia'
        ),
        html.Br()
-    ], className='four columns'),
+    ], className='three columns'),
     
     # Dropdown for attribute
     html.Div([
@@ -66,12 +63,12 @@ app.layout = html.Div(children=[
            value='MeanCommute'
        ),
        html.Br(),
-    ], className='four columns'),
+    ], className='three columns'),
     
     # US MAP
     html.Div([
         dcc.Graph(id='county-map')
-    ], className='ten columns'),
+    ], className='eight columns'),
     
     # Footer
     html.Div([
@@ -79,7 +76,7 @@ app.layout = html.Div(children=[
        html.A('Code on Github', href=githublink),
        html.Br(),
        html.A("Data Source", href=sourceurl)
-    ], className='three columns'),
+    ], className='three columns')
   ]
 )
 
